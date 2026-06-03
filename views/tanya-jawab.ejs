@@ -1,0 +1,40 @@
+<h1 class="text-3xl font-bold text-blue-900 mb-2">Tanya Jawab Hukum Gratis</h1>
+<p class="text-gray-600 mb-8">Kirim pertanyaan hukum Anda, nanti akan dijawab langsung oleh advokat kami.</p>
+
+<% if (query && query.success) { %>
+    <div id="flash-message" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6">✅ Pertanyaan terkirim! Admin akan segera menjawab.</div>
+<% } else if (query && query.error) { %>
+    <div id="flash-message" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">⚠️ Gagal: <%= query.error %></div>
+<% } %>
+
+<div class="grid md:grid-cols-2 gap-8">
+    <div class="bg-white p-6 rounded-xl shadow-md">
+        <h2 class="text-xl font-bold mb-4">Ajukan Pertanyaan</h2>
+        <form action="/tanya-jawab" method="POST">
+            <div class="mb-4"><label class="block text-gray-700">Nama Lengkap *</label><input type="text" name="name" required class="w-full border rounded-lg px-3 py-2 mt-1"></div>
+            <div class="mb-4"><label class="block text-gray-700">Email (opsional)</label><input type="email" name="email" class="w-full border rounded-lg px-3 py-2 mt-1"></div>
+            <div class="mb-4"><label class="block text-gray-700">Pertanyaan Hukum *</label><textarea name="question" rows="4" required class="w-full border rounded-lg px-3 py-2 mt-1"></textarea></div>
+            <button type="submit" class="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Kirim Pertanyaan</button>
+        </form>
+    </div>
+    <div>
+        <h2 class="text-xl font-bold mb-4">Pertanyaan & Jawaban Terbaru</h2>
+        <div class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+            <% if (questions.length === 0) { %><p class="text-gray-500">Belum ada pertanyaan. Silakan ajukan pertanyaan Anda.</p><% } %>
+            <% questions.forEach(q => { %>
+            <div class="bg-white rounded-xl shadow p-4">
+                <div class="flex justify-between items-start">
+                    <div><p class="font-semibold text-blue-900"><%= q.name %></p><p class="text-xs text-gray-400"><%= new Date(q.created_at).toLocaleDateString('id-ID') %></p></div>
+                    <span class="text-xs px-2 py-1 rounded-full <%= q.is_answered ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' %>"><%= q.is_answered ? 'Terjawab' : 'Menunggu jawaban' %></span>
+                </div>
+                <p class="mt-2 text-gray-700"><strong>Pertanyaan:</strong> <%= q.question %></p>
+                <% if (q.answer) { %>
+                <div class="mt-3 bg-gray-50 p-3 rounded-lg border-l-4" style="border-left-color: #c9a03d;"><p class="text-sm font-semibold" style="color: #c9a03d;">Jawaban Advokat:</p><p class="text-gray-700"><%= q.answer %></p></div>
+                <% } else { %>
+                <p class="text-gray-400 text-sm mt-2 italic">⏳ Sedang diproses oleh tim advokat...</p>
+                <% } %>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+</div>

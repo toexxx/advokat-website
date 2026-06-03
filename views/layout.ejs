@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | Kantor Advokat Michael J. Nakamnamu & Partners</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #0f2b3d 0%, #1a4a6f 100%); }
+        .gold-text { color: #c9a03d; }
+        .card-hover:hover { transform: translateY(-5px); transition: all 0.3s ease; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-2">
+            <span class="text-2xl font-bold text-blue-900">⚖️ Nakamnanu Brothers</span>
+            </div>
+            <div class="space-x-4 text-gray-700">
+                <a href="/" class="hover:text-blue-800 font-medium">Beranda</a>
+                <a href="/advokat" class="hover:text-blue-800 font-medium">Advokat</a>
+                <a href="/layanan" class="hover:text-blue-800 font-medium">Layanan</a>
+                <a href="/tanya-jawab" class="hover:text-blue-800 font-medium">Tanya Hukum</a>
+                <a href="/admin/login" class="text-sm bg-gray-100 px-3 py-1 rounded-full hover:bg-gray-200">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <%- body %>
+    </main>
+
+    <footer class="bg-gray-900 text-white mt-12 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">&copy; 2026 Kantor Advokat & Konsultan Hukum Michael J. Nakamnamu, S.H., & Partners</p>
+            <p class="text-sm text-gray-500 mt-2">Memberikan bantuan hukum gratis melalui layanan tanya jawab</p>
+        </div>
+    </footer>
+
+    <script>
+        setTimeout(() => {
+            const notif = document.getElementById('flash-message');
+            if(notif) notif.style.display = 'none';
+        }, 3000);
+    </script>
+</body>
+</html>

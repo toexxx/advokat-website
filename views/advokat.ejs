@@ -1,0 +1,104 @@
+<h1 class="text-3xl font-bold text-blue-900 mb-2">Tim Advokat Kami</h1>
+<p class="text-gray-600 mb-8">Profesional hukum yang siap membela hak Anda. <strong>Klik pada kartu</strong> untuk melihat biodata lengkap.</p>
+
+<div class="grid md:grid-cols-3 gap-8">
+    <% advokats.forEach((advokat, index) => { %>
+    <div class="advokat-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer transition transform hover:scale-105" data-index="<%= index %>" data-name="<%= advokat.name %>" data-title="<%= advokat.title %>" data-photo="<%= advokat.photo || '' %>">
+        <div class="h-64 bg-gray-200 flex items-center justify-center">
+            <% if (advokat.photo) { %>
+                <img src="<%= advokat.photo %>" alt="<%= advokat.name %>" class="w-full h-full object-cover card-photo">
+            <% } else { %>
+                <div class="text-center text-gray-400">
+                    <svg class="w-24 h-24 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                    <p class="text-sm">Foto Advokat</p>
+                </div>
+            <% } %>
+        </div>
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-blue-900"><%= advokat.name %></h3>
+            <p class="font-medium mt-1" style="color: #c9a03d;"><%= advokat.title %></p>
+            <p class="text-gray-500 text-sm mt-3">Spesialisasi: Hukum Pidana, Perdata, dan Hukum Bisnis.</p>
+            <p class="text-blue-600 text-sm mt-2">✨ Klik untuk biodata lengkap</p>
+        </div>
+    </div>
+    <% }); %>
+</div>
+
+<% if (isAdmin) { %>
+<div class="mt-12 bg-blue-50 p-6 rounded-xl text-center">
+    <p class="text-blue-800">📸 Foto para advokat dapat diperbaharui melalui <a href="/admin/upload-foto" class="underline font-bold">Panel Admin</a> (Login terlebih dahulu).</p>
+</div>
+<% } %>
+
+<!-- Modal untuk biodata lengkap -->
+<div id="bioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4" onclick="hideModal(event)">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-blue-900" id="modalName"></h2>
+            <button onclick="hideModal()" class="text-gray-500 hover:text-red-500 text-3xl leading-none">&times;</button>
+        </div>
+        <div class="p-6">
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="w-40 h-40 rounded-full overflow-hidden bg-gray-200 mx-auto md:mx-0 flex-shrink-0">
+                    <img id="modalPhoto" src="" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                    <p class="text-gray-600 mb-2" id="modalTitle"></p>
+                    <div class="prose max-w-none">
+                        <h3 class="text-lg font-semibold text-blue-800 mt-2">📖 Biodata Lengkap</h3>
+                        <p id="modalBio" class="text-gray-700 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Data biodata untuk masing-masing advokat (sesuaikan isinya)
+    const biodataList = [
+        `Michael J. Nakamnamu, S.H. adalah pendiri dan partner senior kantor hukum ini. Beliau lulusan Fakultas Hukum Universitas Atma Jaya Yogyakarta (UAJY) dan telah berpengalaman lebih dari 10 tahun dalam menangani perkara pidana, perdata, dan sengketa bisnis.`,
+        `Manuel D. Nakamnamu, S.H., M.H. meraih gelar Magister Hukum (M.H.) dari Universitas Gadjah Mada. Fokus praktiknya pada hukum pidana, hukum administrasi, dan litigasi perdata. Telah berhasil memenangkan berbagai kasus penting perdata di Mahkamah Agung.`,
+        `Richard F. Talubun, S.H., M.H. adalah ahli hukum bisnis dan korporasi. Lulusan Program Magister Hukum Ekonomi dari Universitas Atma Jaya Yogyakarta (UAJY). Berpengalaman dalam merger & akuisisi, kepailitan, dan hak kekayaan intelektual.`
+    ];
+
+    // Event listener untuk semua kartu advokat
+    document.querySelectorAll('.advokat-card').forEach((card, idx) => {
+        card.addEventListener('click', function(e) {
+            // Ambil data dari atribut data-*
+            const name = this.dataset.name;
+            const title = this.dataset.title;
+            let photoUrl = this.dataset.photo;
+            // Jika photoUrl kosong atau null, gunakan placeholder
+            if (!photoUrl || photoUrl === 'null') {
+                photoUrl = '';
+            }
+            const bio = biodataList[idx] || 'Biodata belum tersedia.';
+
+            // Isi modal
+            document.getElementById('modalName').innerText = name;
+            document.getElementById('modalTitle').innerText = title;
+            const modalPhoto = document.getElementById('modalPhoto');
+            if (photoUrl) {
+                modalPhoto.src = photoUrl;
+                modalPhoto.style.backgroundColor = 'transparent';
+            } else {
+                modalPhoto.src = '';
+                modalPhoto.style.backgroundColor = '#e5e7eb';
+            }
+            document.getElementById('modalBio').innerHTML = bio;
+
+            // Tampilkan modal
+            const modal = document.getElementById('bioModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        });
+    });
+
+    function hideModal(event) {
+        if (event && event.target !== event.currentTarget && event.target !== document.getElementById('bioModal')) return;
+        const modal = document.getElementById('bioModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+</script>

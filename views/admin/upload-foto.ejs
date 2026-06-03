@@ -1,0 +1,23 @@
+<h1 class="text-2xl font-bold mb-6">Unggah / Ganti Foto Advokat</h1>
+
+<% if (query && query.success) { %><div class="bg-green-100 p-3 rounded mb-4">✅ Foto berhasil diperbarui!</div><% } %>
+<% if (query && query.error) { %><div class="bg-red-100 p-3 rounded mb-4">❌ Gagal upload.</div><% } %>
+
+<div class="grid md:grid-cols-3 gap-6">
+    <% advokats.forEach(adv => { %>
+    <div class="bg-white p-4 rounded-xl shadow text-center">
+        <div class="w-32 h-32 mx-auto rounded-full overflow-hidden bg-gray-200 flex items-center justify-center mb-3">
+            <% if (adv.photo) { %><img src="<%= adv.photo %>" class="w-full h-full object-cover"><% } else { %>
+                <svg class="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <% } %>
+        </div>
+        <h3 class="font-bold"><%= adv.name %></h3>
+        <p class="text-sm text-gray-500 mb-2"><%= adv.title %></p>
+        <form action="/admin/upload-foto/<%= adv.id %>" method="POST" enctype="multipart/form-data">
+            <input type="file" name="photo" accept="image/*" required class="text-sm my-2"><br>
+            <button class="bg-blue-800 text-white px-3 py-1 rounded text-sm">Upload Foto</button>
+        </form>
+    </div>
+    <% }); %>
+</div>
+<p class="mt-6 text-center text-gray-500 text-sm">* Foto akan muncul di halaman "Para Advokat".</p>
