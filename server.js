@@ -170,7 +170,7 @@ app.post('/admin/upload-foto/:id', isAdmin, upload.single('photo'), (req, res) =
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server berjalan di http://localhost:${PORT}`);
   if (!fs.existsSync('./uploads/advokats')) fs.mkdirSync('./uploads/advokats', { recursive: true });
 });
